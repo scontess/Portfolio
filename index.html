@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Progetti Web & Apps</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center font-bold text-white shadow-lg shadow-brand-500/20">
+                    S
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Stefano Contessotto</h1>
+                    <p class="text-xs text-slate-400">Web Developer & Automation Specialist</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="https://github.com/scontess" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800">
+                    <i class="fa-brands fa-github text-xl"></i>
+                    <span class="sr-only">GitHub</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold mb-6">
+            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+            Showcase Progetti & Web Apps
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+            Applicazioni Web, Piattaforme & Automation
+        </h2>
+        <p class="max-w-2xl mx-auto text-slate-400 text-sm sm:text-base mb-8">
+            Esplora la mia collezione di progetti web ospitati su Netlify, GitHub Pages e soluzioni integrate sviluppate su Google Apps Script. Clicca su qualsiasi card per interagire in tempo reale.
+        </p>
+
+        <!-- Filtri Categoria -->
+        <div class="flex flex-wrap items-center justify-center gap-2 max-w-xl mx-auto" id="filter-buttons">
+            <button data-filter="all" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all bg-brand-600 text-white shadow-lg shadow-brand-600/30">
+                Tutti (<span id="count-all">0</span>)
+            </button>
+            <button data-filter="netlify" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700">
+                <i class="fa-solid fa-diamond text-teal-400 mr-1.5"></i>Netlify (<span id="count-netlify">0</span>)
+            </button>
+            <button data-filter="gitpages" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700">
+                <i class="fa-brands fa-github text-slate-200 mr-1.5"></i>GitHub Pages (<span id="count-gitpages">0</span>)
+            </button>
+            <button data-filter="appscript" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700">
+                <i class="fa-solid fa-code text-amber-400 mr-1.5"></i>Google Apps Script (<span id="count-appscript">0</span>)
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 w-full">
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Le card verranno inserite dinamicamente da JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <p>© <span id="current-year"></span> Portfolio Progetti. Tutti i diritti riservati.</p>
+            <p class="flex items-center gap-1">
+                Sviluppato con <i class="fa-solid fa-heart text-red-500 mx-0.5"></i> e Tailwind CSS
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive Project Modal / Viewer -->
+    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full h-full max-w-6xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="modal-container">
+            
+            <!-- Modal Header -->
+            <div class="px-4 py-3 sm:px-6 bg-slate-950/60 border-b border-slate-800 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <span id="modal-badge" class="px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shrink-0">
+                        Netlify
+                    </span>
+                    <h3 id="modal-title" class="font-bold text-white text-base sm:text-lg truncate">
+                        Titolo Progetto
+                    </h3>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <a id="modal-external-link" href="#" target="_blank" rel="noopener noreferrer" title="Apri in una nuova scheda" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                    <button id="modal-close-btn" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Frame Body -->
+            <div class="relative flex-1 bg-slate-950 overflow-hidden">
+                <!-- Loader -->
+                <div id="modal-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 z-10">
+                    <div class="w-10 h-10 border-4 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-3"></div>
+                    <p class="text-sm text-slate-400">Caricamento applicazione...</p>
+                </div>
+
+                <!-- Iframe -->
+                <iframe id="modal-iframe" class="w-full h-full border-0" allow="geolocation; microphone; camera; midi; encrypted-media; clipboard-write;" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Array dei progetti forniti
+        const projects = [
+            // Netlify
+            {
+                id: 'bf-silvaweb',
+                title: 'BF Silvaweb',
+                category: 'netlify',
+                categoryLabel: 'Netlify',
+                categoryClass: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+                icon: 'fa-solid fa-diamond text-teal-400',
+                description: 'Applicazione web dinamica con interfaccia responsive ospitata su infrastruttura cloud Netlify.',
+                url: 'https://bf-silvaweb.netlify.app'
+            },
+            {
+                id: 'briscolone',
+                title: 'Briscolone Game',
+                category: 'netlify',
+                categoryLabel: 'Netlify',
+                categoryClass: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+                icon: 'fa-solid fa-gamepad text-teal-400',
+                description: 'Gioco o web app interattiva dedicata al classico gioco del Briscolone.',
+                url: 'https://briscolone.netlify.app'
+            },
+            {
+                id: 'silvatask',
+                title: 'Silva Task Manager',
+                category: 'netlify',
+                categoryLabel: 'Netlify',
+                categoryClass: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+                icon: 'fa-solid fa-list-check text-teal-400',
+                description: 'Piattaforma di gestione compiti e produttività organizzata per un flusso di lavoro efficiente.',
+                url: 'https://silvatask.netlify.app'
+            },
+
+            // GitHub Pages
+            {
+                id: 'dashboard-realtime',
+                title: 'Realtime Dashboard',
+                category: 'gitpages',
+                categoryLabel: 'GitHub Pages',
+                categoryClass: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+                icon: 'fa-solid fa-chart-line text-indigo-400',
+                description: 'Dashboard di monitoraggio con aggiornamento dati e metriche in tempo reale.',
+                url: 'https://scontess.github.io/Dashboard_Realtime/'
+            },
+            {
+                id: 'rag-silva',
+                title: 'RAG Silva AI',
+                category: 'gitpages',
+                categoryLabel: 'GitHub Pages',
+                categoryClass: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+                icon: 'fa-solid fa-brain text-indigo-400',
+                description: 'Progetto basato su architettura RAG (Retrieval-Augmented Generation) per l\'elaborazione dati con AI.',
+                url: 'https://scontess.github.io/RAG_silva/'
+            },
+            {
+                id: 'shoponline',
+                title: 'Shop Online E-Commerce',
+                category: 'gitpages',
+                categoryLabel: 'GitHub Pages',
+                categoryClass: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+                icon: 'fa-solid fa-cart-shopping text-indigo-400',
+                description: 'Interfaccia e-commerce moderna per l\'esposizione e la gestione di prodotti online.',
+                url: 'https://scontess.github.io/shoponline/'
+            },
+
+            // Google Apps Script
+            {
+                id: 'gas-1',
+                title: 'Apps Script App #1',
+                category: 'appscript',
+                categoryLabel: 'Google Apps Script',
+                categoryClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                icon: 'fa-solid fa-code text-amber-400',
+                description: 'Web Application custom integrata con l\'ecosistema Google e Google Workspace.',
+                url: 'https://script.google.com/macros/s/AKfycbzYjXDGm4k83dPaI8EyI_YgHXXx0dvOcpadvTyBZgcjCEWsFkrofCqXughmoCmFXGCt/exec'
+            },
+            {
+                id: 'gas-2',
+                title: 'Apps Script App #2',
+                category: 'appscript',
+                categoryLabel: 'Google Apps Script',
+                categoryClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                icon: 'fa-solid fa-gear text-amber-400',
+                description: 'Servizio di automazione e gestione dati basato su script lato server Google.',
+                url: 'https://script.google.com/macros/s/AKfycbznW3VLOkRIRmSnGhFJgrAJobMtDOVI5it2kRZePr_hIEGdlMSVyaCefJcjX_ZDpz8tcA/exec'
+            },
+            {
+                id: 'gas-3',
+                title: 'Apps Script App #3',
+                category: 'appscript',
+                categoryLabel: 'Google Apps Script',
+                categoryClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                icon: 'fa-solid fa-database text-amber-400',
+                description: 'Interfaccia web interattiva per la manipolazione di fogli di calcolo e database Google.',
+                url: 'https://script.google.com/macros/s/AKfycbzxDr6vPCd6oQKwOODLEcI9jJWxiPoDKwbY36cbCZspGV7vVeI8-i7YlAPjLRHuKuB1/exec'
+            },
+            {
+                id: 'gas-4',
+                title: 'Apps Script App #4',
+                category: 'appscript',
+                categoryLabel: 'Google Apps Script',
+                categoryClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                icon: 'fa-solid fa-wand-magic-sparkles text-amber-400',
+                description: 'Tool di automazione personalizzato per l\'ottimizzazione dei flussi di lavoro.',
+                url: 'https://script.google.com/macros/s/AKfycbyUgTc89evPsMSjAbz75m6DZXxD_AiAkw_qk8yzn7yTnbPothE9vWR75qjv507drYYy_Q/exec'
+            },
+            {
+                id: 'gas-5',
+                title: 'Apps Script App #5',
+                category: 'appscript',
+                categoryLabel: 'Google Apps Script',
+                categoryClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                icon: 'fa-solid fa-bolt text-amber-400',
+                description: 'Web Service serverless integrato in Google Cloud Platform / Apps Script.',
+                url: 'https://script.google.com/macros/s/AKfycbz9KP_FiAxTpgfM3cdM8qh9xaEG6OEv5Yzr3ldvmkc2XiNx2g9LSWeMqYXzk8xxi_A/exec'
+            }
+        ];
+
+        // Elementi DOM
+        const grid = document.getElementById('projects-grid');
+        const modal = document.getElementById('project-modal');
+        const modalContainer = document.getElementById('modal-container');
+        const modalIframe = document.getElementById('modal-iframe');
+        const modalLoader = document.getElementById('modal-loader');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBadge = document.getElementById('modal-badge');
+        const modalExternalLink = document.getElementById('modal-external-link');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // Imposta l'anno corrente nel footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Conteggio categorie
+        function updateCounts() {
+            document.getElementById('count-all').textContent = projects.length;
+            document.getElementById('count-netlify').textContent = projects.filter(p => p.category === 'netlify').length;
+            document.getElementById('count-gitpages').textContent = projects.filter(p => p.category === 'gitpages').length;
+            document.getElementById('count-appscript').textContent = projects.filter(p => p.category === 'appscript').length;
+        }
+
+        // Render delle Cards
+        function renderCards(filter = 'all') {
+            grid.innerHTML = '';
+            
+            const filteredProjects = filter === 'all' 
+                ? projects 
+                : projects.filter(p => p.category === filter);
+
+            filteredProjects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'group bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-slate-600 rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-1 cursor-pointer';
+                card.onclick = () => openModal(project);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${project.categoryClass}">
+                                <i class="${project.icon} text-xs"></i>
+                                ${project.categoryLabel}
+                            </span>
+                            <div class="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center text-slate-400 group-hover:bg-brand-500 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors mb-2">
+                            ${project.title}
+                        </h3>
+
+                        <p class="text-sm text-slate-400 leading-relaxed mb-6">
+                            ${project.description}
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between text-xs text-slate-400">
+                        <span class="truncate max-w-[200px] text-slate-500">${project.url.replace('https://', '')}</span>
+                        <span class="font-medium text-brand-400 group-hover:underline flex items-center gap-1">
+                            Anteprima <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Logica Modal
+        function openModal(project) {
+            modalTitle.textContent = project.title;
+            modalBadge.textContent = project.categoryLabel;
+            modalBadge.className = `px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shrink-0 border ${project.categoryClass}`;
+            modalExternalLink.href = project.url;
+            
+            // Mostra il loader e carica l'iframe
+            modalLoader.classList.remove('hidden');
+            modalIframe.src = project.url;
+
+            // Transizione apertura
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-95');
+            modalContainer.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-100');
+            modalContainer.classList.add('scale-95');
+            document.body.style.overflow = '';
+
+            // Svuota l'iframe dopo la transizione per fermare script/audio in esecuzione
+            setTimeout(() => {
+                modalIframe.src = '';
+            }, 300);
+        }
+
+        // Event Listeners
+        modalIframe.addEventListener('load', () => {
+            modalLoader.classList.add('hidden');
+        });
+
+        modalCloseBtn.addEventListener('click', closeModal);
+
+        // Chiudi cliccando all'esterno del contenitore modal
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Chiudi premendo ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Gestione Filtri
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Aggiorna stile bottoni
+                filterButtons.forEach(b => {
+                    b.className = 'filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700';
+                });
+                btn.className = 'filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all bg-brand-600 text-white shadow-lg shadow-brand-600/30';
+
+                // Applica filtro
+                const filterValue = btn.getAttribute('data-filter');
+                renderCards(filterValue);
+            });
+        });
+
+        // Inizializzazione
+        updateCounts();
+        renderCards('all');
+    </script>
+</body>
+</html>
